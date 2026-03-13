@@ -55,3 +55,8 @@ htmlcov/
 .env.example
 educateai-complete-journey.md
 PLAN.md
+
+notebooks/example.pdf
+notebooks/example.docx
+
+uv.lock

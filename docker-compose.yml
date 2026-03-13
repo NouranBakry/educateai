@@ -1,0 +1,29 @@
+services:
+  # defines all containers you want to run
+
+  api:
+    # a named service (you pick the name)
+    build: . # build using the Dockerfile in current dir
+    ports:
+      - "8000:8000"
+        # host_port:container_port — maps your laptop's 8000
+        # to the container's 8000
+    env_file:
+      - .env
+        # load environment variables from .env file
+        # so GEMINI_API_KEY gets into the container
+    volumes:
+      - ./chroma_db:/app/chroma_db
+        # persist ChromaDB data on your laptop
+        # so it survives container restarts
+
+  ui:
+    build: . # same image, different command
+    command: [ "streamlit", "run", "src/educateai/ui/app.py", "--server.port", "8501", "--server.address", "0.0.0.0" ]
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api # don't start ui until api is up
+
+volumes:
+  chroma_db: # named volume declaration
