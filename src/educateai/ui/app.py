@@ -13,5 +13,16 @@ uploaded = st.file_uploader("Upload curriculum (PDF or DOCX)", type=["pdf", "doc
 st.write("— or —")
 subject = st.text_area("Describe a subject / paste curriculum text")
 
-if st.button("Generate Content", disabled=not (uploaded or subject)):
-    st.warning("API backend not connected yet — coming soon.")
+import requests
+
+if st.button("Generate Content", disabled=not uploaded):
+    with st.spinner("Processing..."):
+        response = requests.post(
+            "http://localhost:8000/api/upload",
+            files={"file": (uploaded.name, uploaded.getvalue(), uploaded.type)}
+        )
+    if response.status_code == 200:
+        data = response.json()
+        st.success(f"Uploaded {data['chunk_count']} chunks from {data['filename']}")
+    else:
+        st.error(response.json().get("detail", "Upload failed"))
