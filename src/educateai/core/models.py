@@ -9,3 +9,4 @@ class Chunk(BaseModel):
     source_file: str
     chunk_index: int
     char_count: int
+    embedding: list[float] | None = None

@@ -1,0 +1,2 @@
+''' stores embeddings to chromadb'''
+
