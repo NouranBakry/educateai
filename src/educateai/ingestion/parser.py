@@ -1,26 +1,27 @@
-# parses files that we get in upload endpoint
-
 import os
 import pdfplumber
 
 
-def parse_uploaded_file(file_path: str) -> dict[str, str]:
+def parse_uploaded_file(file_path: str) -> str:
     """
-    Parses the uploaded file and extracts text.
+    Dispatches to the correct extractor based on file extension.
 
     Args:
-        file_path (str): The path to the uploaded file.
+        file_path (str): Absolute path to the uploaded file.
 
     Returns:
-        dict[str, str]: {"text": extracted_text}
+        str: Extracted text, with ## prefixes on detected headers.
+
+    Raises:
+        ValueError: If the file extension is not .txt, .pdf, or .docx.
     """
     file_extension = os.path.splitext(file_path)[1].lower()
     if file_extension == ".txt":
-        return {"text": extract_text_from_file(file_path)}
+        return extract_text_from_file(file_path)
     elif file_extension == ".pdf":
-        return {"text": extract_text_from_pdf(file_path)}
+        return extract_text_from_pdf(file_path)
     elif file_extension == ".docx":
-        return {"text": extract_text_from_docx(file_path)}
+        return extract_text_from_docx(file_path)
     else:
         raise ValueError(f"Unsupported file type: {file_extension}")
 

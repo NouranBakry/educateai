@@ -1,23 +1,21 @@
-''' stores embeddings to chromadb'''
+"""Stores embedded chunks to ChromaDB and provides similarity search."""
 
 from educateai.core.models import Chunk
 import chromadb
 
-# persistent storage in ./chroma_db
 _client = chromadb.PersistentClient(path="data/chromadb")
-_collection = _client.get_or_create_collection(
-    name="chunks")  # collection for our chunks
+_collection = _client.get_or_create_collection(name="chunks")
 
 
 def save_chunks(chunks: list[Chunk]) -> None:
     """
-    Save the embedded chunks to the database.
+    Persists embedded chunks to ChromaDB in a single batched call.
 
     Args:
-        chunks (list[Chunk]): A list of Chunk objects to be saved.
+        chunks (list[Chunk]): Chunks with embedding field populated.
 
     Returns:
-        list[Chunk]: The list of saved Chunk objects.
+        None
     """
     _collection.add(
         ids=[chunk.chunk_id for chunk in chunks],

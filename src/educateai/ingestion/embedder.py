@@ -8,15 +8,14 @@ _model = SentenceTransformer(
 
 def embed_chunks(chunks: list[Chunk]) -> list[Chunk]:
     """
-    Placeholder function for embedding chunks of text.
+    Encodes each chunk's text into a 384-dimensional vector using all-MiniLM-L6-v2.
 
     Args:
-        chunks (List[Chunk]): A list of Chunk objects to be embedded.
+        chunks (list[Chunk]): Chunks to embed. Each chunk must have a non-empty text field.
 
     Returns:
-        None
+        list[Chunk]: The same chunks with embedding field populated.
     """
     for chunk in chunks:
         chunk.embedding = _model.encode(chunk.text).tolist()
-        print(chunk.embedding)  # For demonstration, print the embedding vector
     return chunks

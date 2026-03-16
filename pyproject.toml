@@ -38,6 +38,7 @@ dependencies = [
     "structlog>=24.0.0",
     # Readability
     "textstat>=0.7.0",
+    "python-dotenv>=1.2.2",
 ]
 
 [project.optional-dependencies]
