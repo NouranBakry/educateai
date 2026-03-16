@@ -91,6 +91,35 @@ uv run pytest tests/ --cov=educateai --cov-report=term-missing
 
 ---
 
+## Status
+
+### Done — Phase 1 (Ingestion Pipeline)
+- [x] `parser.py` — PDF/DOCX/TXT text extraction with header detection via pdfplumber
+- [x] `chunker.py` — structural split → merge small → split large → topic from header (no API)
+- [x] `embedder.py` — all-MiniLM-L6-v2 local embeddings, 384-dim
+- [x] `store.py` — ChromaDB persistent storage + similarity search
+- [x] `core/models.py` — `Chunk` Pydantic model
+- [x] `api/app.py` — `POST /api/upload` with exception handling (400/422/500)
+- [x] `tests/unit/test_chunker.py` — chunker unit tests
+- [x] `tests/unit/test_parser.py` — parser unit tests
+
+### To Do — Phase 2 (Generator)
+- [ ] `generators/generator.py` — `generate_answer(query)`: embed → ChromaDB search → Gemini prompt → answer
+- [ ] `core/models.py` — add `QueryRequest` Pydantic model
+- [ ] `api/app.py` — add `POST /api/query` endpoint
+- [ ] `ui/app.py` — wire upload button to API + add query input + display answer
+- [ ] `tests/unit/test_generator.py` — generator unit tests (mock Gemini)
+
+### Backlog — Phase 3+
+- [ ] Flashcard generation (Q&A pairs, PDF + Anki export)
+- [ ] Quiz generation (multiple choice, true/false)
+- [ ] Audio lesson generation (edge-tts)
+- [ ] User auth + curriculum management (SQLAlchemy + PostgreSQL)
+- [ ] Readability validation (Flesch-Kincaid score per age group)
+- [ ] Deploy to Hugging Face Spaces
+
+---
+
 ## Project Structure
 
 ```
