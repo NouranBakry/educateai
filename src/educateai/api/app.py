@@ -1,5 +1,5 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException
 from educateai.ingestion import parser, chunker, embedder, store
+from fastapi import FastAPI, UploadFile, File, HTTPException
 import tempfile
 import os
 
