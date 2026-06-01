@@ -53,10 +53,10 @@ htmlcov/
 .ruff_cache/
 
 .env.example
-educateai-complete-journey.md
-PLAN.md
+docs/
 
 notebooks/example.pdf
 notebooks/example.docx
 
 uv.lock
+data/

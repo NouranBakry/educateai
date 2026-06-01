@@ -1,17 +1,24 @@
 # EducateAI
 
-Turn any curriculum document into child-appropriate learning content.
-Upload a PDF or DOCX → get flashcards, quizzes, audio lessons, and study guides tailored to your child's age.
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-latest-green)
+![ChromaDB](https://img.shields.io/badge/ChromaDB-persistent-orange)
+![Docker](https://img.shields.io/badge/Docker-compose-blue)
+![Status](https://img.shields.io/badge/Phase_1-complete-brightgreen)
+
+RAG pipeline that turns uploaded curriculum documents into AI-generated flashcards, quizzes, and audio lessons.
+
+Built to go deep on the full RAG stack: structure-aware document parsing, offline chunking strategy, local embeddings, vector storage, and LLM-powered generation.
 
 ---
 
 ## How It Works
 
 ```
-Upload PDF/DOCX
+Upload PDF/DOCX/TXT
       │
       ▼
-  parser.py        extract text, detect headers with pdfplumber
+  parser.py        extract text, detect headers (font-size for PDF, heading styles for DOCX)
       │
       ▼
   chunker.py       split at headers/paragraphs, merge tiny pieces, break oversized ones
@@ -23,8 +30,23 @@ Upload PDF/DOCX
   store.py         persist vectors + metadata to ChromaDB (survives restarts)
       │
       ▼
-  generator.py     user asks a question → retrieve top chunks → Gemini writes the answer
+  generator.py     [Phase 2] embed query → retrieve top-k chunks → Gemini writes the answer
 ```
+
+---
+
+## Technical Decisions
+
+**Chunking without an LLM** — the chunker uses document structure (headers, paragraph breaks)
+as split signals, then merges undersized segments and breaks oversized ones at sentence
+boundaries. Zero API latency, zero cost in the ingestion path. Topic labels are derived from
+the nearest header — good enough for retrieval at this scale.
+
+**Local embeddings** — all-MiniLM-L6-v2 runs entirely on-device. At 384 dimensions it's fast
+without a GPU and hits the quality/cost sweet spot for document retrieval on commodity hardware.
+
+**ChromaDB over a hosted vector DB** — no infrastructure cost, persists to disk, works offline.
+Right choice until there's a reason to scale out.
 
 ---
 
